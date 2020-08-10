@@ -2,6 +2,8 @@ const mysql = require("mysql");
 const inquirer = require("inquirer");
 const cTable = require("console.table");
 
+// set up connection to server
+// =========================================================
 var connection = mysql.createConnection({
     host: "localhost",
 
@@ -12,7 +14,7 @@ var connection = mysql.createConnection({
     user: "root",
 
     // Your password
-    password: "20164Runner",
+    password: "",
     database: "employeeTracker_DB"
 });
 
@@ -23,11 +25,13 @@ connection.connect(function (err) {
 });
 
 // Function to run inquirer
+// =========================================================
 function questions(options) {
     return inquirer.prompt(options);
 }
 
 // main function to run program
+// =========================================================
 const start = function () {
     questions({
         name: "action",
@@ -56,6 +60,8 @@ const start = function () {
     })
 }
 
+// query specific functions
+// =========================================================
 const employeeSearch = function () {
     var query = "SELECT *"
     query += "FROM employee"
@@ -67,9 +73,10 @@ const employeeSearch = function () {
 }
 
 const add = function () {
-    
+    console.log("not built yet");
+    var query = "INSERT INTO employee ()"
 }
 
 const update = function () {
-    
+    console.log("not built yet");
 }
