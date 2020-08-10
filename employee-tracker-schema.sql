@@ -35,3 +35,8 @@ VALUES ("Intern", 40000, 1), ("Manager", 80000, 2), ("Janitor", 35000, 3);
 
 INSERT INTO department (department_name)
 VALUES ("Engineering"), ("Managment"), ("Janitorial");
+
+-- select everything
+SELECT * FROM employee;
+SELECT * FROM roles;
+SELECT * FROM department;
