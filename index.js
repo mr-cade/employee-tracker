@@ -1,6 +1,6 @@
 const mysql = require("mysql");
 const inquirer = require("inquirer");
-const consoleTable = require("console.table");
+const cTable = require("console.table");
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -57,7 +57,13 @@ const start = function () {
 }
 
 const employeeSearch = function () {
-
+    var query = "SELECT *"
+    query += "FROM employee"
+    
+    connection.query(query, function (error, results, fields){
+        // console.log(cTable.getTable([results]));
+        console.log(results);
+    })
 }
 
 const add = function () {
