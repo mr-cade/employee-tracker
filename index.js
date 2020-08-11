@@ -64,18 +64,18 @@ const start = function () {
 // =========================================================
 const employeeSearch = function () {
     questions({
-        name: "fName",
+        name: "id",
         type: "input",
-        message: "Please enter the first name of the employee you would like to view."
+        message: "Please enter the id of the employee you would like to view."
     })
         .then(function (answer) {
             var query = "SELECT * "
             query += "FROM employee "
             query += "INNER JOIN roles ON (employee.id = roles.id) "
             query += "INNER JOIN department ON (employee.id = department.id) "
-            query += "WHERE first_name = ?"
+            query += "WHERE employee.id = ?"
 
-            connection.query(query, [answer.fName], function (error, results, fields) {
+            connection.query(query, [answer.id], function (error, results, fields) {
                 console.log("");
                 console.table(results);
             })
