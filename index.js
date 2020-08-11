@@ -40,7 +40,7 @@ const start = function () {
         choices: [
             "View Employees",
             "Add departments, roles, and employees",
-            "Update an employee's role",
+            "Update an employee's data",
         ]
     })
         .then(function (answer) {
@@ -53,14 +53,14 @@ const start = function () {
                     add();
                     break;
 
-                case "Update an employee's role":
+                case "Update an employee's data":
                     update();
                     break;
             }
         })
 }
 
-// query specific functions
+// query specific functions used above
 // =========================================================
 const employeeSearch = function () {
     questions({
@@ -70,11 +70,12 @@ const employeeSearch = function () {
     })
         .then(function (answer) {
             var query = "SELECT * "
-            query += "FROM employee "
+            query += "FROM employee INNER JOIN roles ON (employee.id = roles.id) "
             query += "WHERE first_name = ?"
 
             connection.query(query, [answer.fName], function (error, results, fields) {
-                console.table(results)
+                console.log("");
+                console.table(results);
             })
             start()
         })
@@ -103,18 +104,53 @@ const add = function () {
     }]
     )
         .then(function (answer) {
-            console.log("questions answered")
             var query = "INSERT INTO employee (first_name, last_name, role_id, manager_id) "
             query += "VALUES (?, ?, ?, ?)"
 
             connection.query(query, [answer.fName, answer.lName, answer.role, answer.manager], function (error, results, fields) {
-                        console.table(results);
-                    })
-                    console.log("successfully added")
-                    start()
-                })
+                console.table(results);
+                if (error) throw error;
+            })
+            console.log("successfully added")
+            start()
+        })
 }
 
 const update = function () {
-    console.log("not built yet");
+    questions([{
+        name: "id",
+        type: "input",
+        message: "Please enter the ID of the employee you would like to update"
+    },
+    {
+        name: "key",
+        type: "rawlist",
+        message: "Please choose the data of the employee you would like to update",
+        choices: [
+            "first_name",
+            "last_name",
+            "role_id",
+            "manager_id"
+        ]
+    },
+    {
+        name: "value",
+        type: "input",
+        message: "Please enter the updated value of the employee you would like to update"
+    }
+    ])
+        .then(function (answer) {
+            var query = "UPDATE employee "
+            query += "SET ? = ? "
+            query += "WHERE employee.id = ?"
+
+            connection.query(query, [answer.key, answer.value, answer.id], function (error, results, fields) {
+                console.table(results);
+                if (error) {
+                    return console.log("unable to update as requested")
+                }
+            })
+            console.log("successfully updated");
+            start();
+        })
 }
