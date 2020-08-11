@@ -14,7 +14,7 @@ var connection = mysql.createConnection({
     user: "root",
 
     // Your password
-    password: "20164Runner",
+    password: "",
     database: "employeeTracker_DB"
 });
 
@@ -70,7 +70,9 @@ const employeeSearch = function () {
     })
         .then(function (answer) {
             var query = "SELECT * "
-            query += "FROM employee INNER JOIN roles ON (employee.id = roles.id) "
+            query += "FROM employee "
+            query += "INNER JOIN roles ON (employee.id = roles.id) "
+            query += "INNER JOIN department ON (employee.id = department.id) "
             query += "WHERE first_name = ?"
 
             connection.query(query, [answer.fName], function (error, results, fields) {
