@@ -14,7 +14,7 @@ var connection = mysql.createConnection({
     user: "root",
 
     // Your password
-    password: "",
+    password: "20164Runner",
     database: "employeeTracker_DB"
 });
 
@@ -43,33 +43,41 @@ const start = function () {
             "Update an employee's role",
         ]
     })
-    .then(function (answer) {
-        switch (answer.action) {
-            case "View Employees":
-                employeeSearch();
-                break;
+        .then(function (answer) {
+            switch (answer.action) {
+                case "View Employees":
+                    employeeSearch();
+                    break;
 
-            case "Add departments, roles, and employees":
-                add();
-                break;
+                case "Add departments, roles, and employees":
+                    add();
+                    break;
 
-            case "Update an employee's role":
-                update();
-                break;
-        }
-    })
+                case "Update an employee's role":
+                    update();
+                    break;
+            }
+        })
 }
 
 // query specific functions
 // =========================================================
 const employeeSearch = function () {
-    var query = "SELECT *"
-    query += "FROM employee"
-    
-    connection.query(query, function (error, results, fields){
-        // console.log(cTable.getTable([results]));
-        console.log(results);
+    questions({
+        name: "fName",
+        type: "input",
+        message: "Please enter the first name of the employee you would like to view."
     })
+        .then(function (answer) {
+            var query = "SELECT * "
+            query += "FROM employee "
+            query += "WHERE first_name = ?"
+
+            connection.query(query, [answer.fName] ,function (error, results, fields) {
+                console.log(cTable.getTable([results]));
+                console.log(results);
+            })
+        })
 }
 
 const add = function () {

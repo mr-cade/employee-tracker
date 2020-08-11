@@ -28,7 +28,7 @@ CREATE TABLE department(
 
 -- seed data
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Sterling", "Archer", 1, 1), ("Lana", "Kane", 2, 2), ("Algernon", "Krieger", 3, 3);
+VALUES ("Sterling", "Archer", 1, 1), ("Lana", "Kane", 2, 1), ("Algernon", "Krieger", 3, 1);
 
 INSERT INTO roles (title, salary, department_id)
 VALUES ("Intern", 40000, 1), ("Manager", 80000, 2), ("Janitor", 35000, 3);
