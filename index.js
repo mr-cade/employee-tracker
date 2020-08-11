@@ -73,16 +73,46 @@ const employeeSearch = function () {
             query += "FROM employee "
             query += "WHERE first_name = ?"
 
-            connection.query(query, [answer.fName] ,function (error, results, fields) {
-                console.log(cTable.getTable([results]));
-                console.log(results);
+            connection.query(query, [answer.fName], function (error, results, fields) {
+                console.table(results)
             })
+            start()
         })
 }
 
 const add = function () {
-    console.log("not built yet");
-    var query = "INSERT INTO employee ()"
+    questions([{
+        name: "fName",
+        type: "input",
+        message: "Please enter the first name of the employee you would like to add"
+    },
+    {
+        name: "lName",
+        type: "input",
+        message: "Please enter the last name of the employee you would like to add"
+    },
+    {
+        name: "role",
+        type: "input",
+        message: "Please enter the role ID of the employee you would like to add"
+    },
+    {
+        name: "manager",
+        type: "input",
+        message: "Please enter the manager ID of the employee you would like to add"
+    }]
+    )
+        .then(function (answer) {
+            console.log("questions answered")
+            var query = "INSERT INTO employee (first_name, last_name, role_id, manager_id) "
+            query += "VALUES (?, ?, ?, ?)"
+
+            connection.query(query, [answer.fName, answer.lName, answer.role, answer.manager], function (error, results, fields) {
+                        console.table(results);
+                    })
+                    console.log("successfully added")
+                    start()
+                })
 }
 
 const update = function () {
