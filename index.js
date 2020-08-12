@@ -38,19 +38,34 @@ const start = function () {
         type: "rawlist",
         message: "What would you like to do?",
         choices: [
+            "View all employees",
             "View Employees",
-            "Add departments, roles, and employees",
-            "Update an employee's data",
+            "Add employees",
+            "Add departments",
+            "Add roles",
+            "Update an employee's data"
         ]
     })
         .then(function (answer) {
             switch (answer.action) {
+                case "View all employees":
+                    allEmployees();
+                    break;
+
                 case "View Employees":
                     employeeSearch();
                     break;
 
-                case "Add departments, roles, and employees":
-                    add();
+                case "Add employees":
+                    addEmployee();
+                    break;
+
+                case "Add roles":
+                    addRole();
+                    break;
+
+                case "Add departments":
+                    addDepartment();
                     break;
 
                 case "Update an employee's data":
@@ -62,6 +77,19 @@ const start = function () {
 
 // query specific functions used above
 // =========================================================
+const allEmployees = function () {
+    var query = "SELECT * "
+    query += "FROM employee "
+    query += "INNER JOIN roles ON (employee.id = roles.id) "
+    query += "INNER JOIN department ON (employee.id = department.id) "
+
+    connection.query(query, function (error, results, fields) {
+        console.log("");
+        console.table(results);
+    })
+    start()
+}
+
 const employeeSearch = function () {
     questions({
         name: "id",
@@ -83,7 +111,7 @@ const employeeSearch = function () {
         })
 }
 
-const add = function () {
+const addEmployee = function () {
     questions([{
         name: "fName",
         type: "input",
@@ -118,6 +146,56 @@ const add = function () {
         })
 }
 
+const addDepartment = function () {
+    questions([{
+        name: "name",
+        type: "input",
+        message: "Please enter the name of the department you would like to add"
+    }]
+    )
+        .then(function (answer) {
+            var query = "INSERT INTO department (department_name) "
+            query += "VALUES (?)"
+
+            connection.query(query, [answer.name], function (error, results, fields) {
+                console.table(results);
+                if (error) throw error;
+            })
+            console.log("successfully added")
+            start()
+        })
+}
+
+const addRole = function () {
+        questions([{
+            name: "title",
+            type: "input",
+            message: "Please enter the title of the role you would like to add"
+        },
+        {
+            name: "salary",
+            type: "input",
+            message: "Please enter the salary of the role you would like to add"
+        },
+        {
+            name: "department_id",
+            type: "input",
+            message: "Please enter the department ID of the role you would like to add"
+        }]
+        )
+            .then(function (answer) {
+                var query = "INSERT INTO roles (title, salary, department_id) "
+                query += "VALUES (?, ?, ?)"
+    
+                connection.query(query, [answer.title, answer.salary, answer.department_id], function (error, results, fields) {
+                    console.table(results);
+                    if (error) throw error;
+                })
+                console.log("successfully added")
+                start()
+            })
+}
+
 const update = function () {
     questions([{
         name: "id",
@@ -125,7 +203,7 @@ const update = function () {
         message: "Please enter the ID of the employee you would like to update"
     },
     {
-        name: "key",
+        name: "employeeAttribute",
         type: "rawlist",
         message: "Please choose the data of the employee you would like to update",
         choices: [
@@ -136,23 +214,62 @@ const update = function () {
         ]
     },
     {
-        name: "value",
+        name: "employeeValue",
         type: "input",
         message: "Please enter the updated value of the employee you would like to update"
     }
     ])
         .then(function (answer) {
-            var query = "UPDATE employee "
-            query += "SET ? = ? "
-            query += "WHERE employee.id = ?"
+            console.log(answer);
+            switch (answer.employeeAttribute) {
+                case "first_name":
+                    var query = "UPDATE employee SET first_name = ? WHERE id = ?"
+                    connection.query(query, [answer.employeeValue, Number(answer.id)], function (error, results, fields) {
+                        console.table(results);
+                        if (error) {
+                            return console.log(error);
+                        }
+                    })
+                    console.log("successfully updated");
+                    start();
+                    break;
 
-            connection.query(query, [answer.key, answer.value, answer.id], function (error, results, fields) {
-                console.table(results);
-                if (error) {
-                    return console.log("unable to update as requested")
-                }
-            })
-            console.log("successfully updated");
-            start();
-        })
-}
+                case "last_name":
+                    var query = "UPDATE employee SET last_name = ? WHERE id = ?"
+                    connection.query(query, [answer.employeeValue, Number(answer.id)], function (error, results, fields) {
+                        console.table(results);
+                        if (error) {
+                            return console.log(error);
+                        }
+                    })
+                    console.log("successfully updated");
+                    start();
+                    break;
+
+                case "role_id":
+                    var query = "UPDATE employee SET role_id = ? WHERE id = ?"
+                    connection.query(query, [answer.employeeValue, Number(answer.id)], function (error, results, fields) {
+                        console.table(results);
+                        if (error) {
+                            return console.log(error);
+                        }
+                    })
+                    console.log("successfully updated");
+                    start();
+                    break;
+
+                case "manager_id":
+                    var query = "UPDATE employee SET manager_id = ? WHERE id = ?"
+                    connection.query(query, [answer.employeeValue, Number(answer.id)], function (error, results, fields) {
+                        console.table(results);
+                        if (error) {
+                            return console.log(error);
+                        }
+                    })
+                    console.log("successfully updated");
+                    start();
+                    break;
+            }
+})}
+
+// switch case switch query for each "answer.employeeAttribut etc."
