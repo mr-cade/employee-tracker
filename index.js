@@ -8,13 +8,13 @@ var connection = mysql.createConnection({
     host: "localhost",
 
     // Your port; if not 3306
-    port: 3306,
+    PORT: 3306,
 
     // Your username
     user: "root",
 
     // Your password
-    password: "",
+    password: "20164Runner",
     database: "employeeTracker_DB"
 });
 
@@ -39,6 +39,7 @@ const start = function () {
         message: "What would you like to do?",
         choices: [
             "View all employees",
+            "View all employees by manager",
             "View all departments",
             "View all roles",
             "Search Employees",
@@ -54,6 +55,10 @@ const start = function () {
                     allEmployees();
                     break;
                 
+                case "View all employees by manager":
+                    employeesByManager();
+                    break;
+
                 case "View all departments":
                     allDepartments();
                     break;
@@ -90,8 +95,8 @@ const start = function () {
 const allEmployees = function () {
     var query = "SELECT * "
     query += "FROM employee "
-    query += "INNER JOIN roles ON (employee.id = roles.id) "
-    query += "INNER JOIN department ON (employee.id = department.id) "
+    query += "LEFT JOIN roles ON (employee.role_id = roles.id) "
+    query += "LEFT JOIN department ON (employee.id = department.id)"
 
     connection.query(query, function (error, results, fields) {
         console.log("");
@@ -102,22 +107,25 @@ const allEmployees = function () {
 
 const allDepartments = function () {
     var query = "SELECT * "
-    query += "FROM department"
+    query += "FROM department "
 
     connection.query(query, function (error, results, fields) {
         console.log("");
         console.table(results);
     })
+    start();
 }
 
 const allRoles = function () {
     var query = "SELECT * "
-    query += "FROM roles"
+    query += "FROM roles "
+    query += "INNER JOIN department ON (roles.department_id = department.id)"
 
     connection.query(query, function (error, results, fields) {
         console.log("");
         console.table(results);
     })
+    start();
 }
 
 const employeeSearch = function () {

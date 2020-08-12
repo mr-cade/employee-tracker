@@ -28,13 +28,13 @@ CREATE TABLE department(
 
 -- seed data
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Sterling", "Archer", 1, 2), ("Lana", "Kane", 2, 2), ("Algernon", "Krieger", 3, 2), ("Mallory", "Archer", 4, NULL);
+VALUES ("Sterling", "Archer", 1, 2), ("Lana", "Kane", 2, 5), ("Algernon", "Krieger", 3, 2), ("Mallory", "Archer", 4, NULL), ("Cyrill", "Figgis", 5, 4);
 
 INSERT INTO roles (title, salary, department_id)
-VALUES ("Intern", 40000, 1), ("Manager", 100000, 2), ("Researcher", 120000, 3), ("CEO", 1000000, 2);
+VALUES ("Engineer", 40000, 1), ("Manager", 100000, 2), ("Researcher", 120000, 3), ("CEO", 1000000, 2), ("CFO", 800000, 2);
 
 INSERT INTO department (department_name)
-VALUES ("Engineering"), ("Managment"), ("Research and Development");
+VALUES ("Engineering"), ("Management"), ("Research and Development");
 
 -- select everything
 SELECT * FROM employee;
