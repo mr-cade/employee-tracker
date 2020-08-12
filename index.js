@@ -39,7 +39,9 @@ const start = function () {
         message: "What would you like to do?",
         choices: [
             "View all employees",
-            "View Employees",
+            "View all departments",
+            "View all roles",
+            "Search Employees",
             "Add employees",
             "Add departments",
             "Add roles",
@@ -51,8 +53,16 @@ const start = function () {
                 case "View all employees":
                     allEmployees();
                     break;
+                
+                case "View all departments":
+                    allDepartments();
+                    break;
 
-                case "View Employees":
+                case "View all roles":
+                    allRoles();
+                    break;
+
+                case "Search Employees":
                     employeeSearch();
                     break;
 
@@ -75,7 +85,7 @@ const start = function () {
         })
 }
 
-// query specific functions used above
+// query specific functions used above in main program
 // =========================================================
 const allEmployees = function () {
     var query = "SELECT * "
@@ -88,6 +98,26 @@ const allEmployees = function () {
         console.table(results);
     })
     start()
+}
+
+const allDepartments = function () {
+    var query = "SELECT * "
+    query += "FROM department"
+
+    connection.query(query, function (error, results, fields) {
+        console.log("");
+        console.table(results);
+    })
+}
+
+const allRoles = function () {
+    var query = "SELECT * "
+    query += "FROM roles"
+
+    connection.query(query, function (error, results, fields) {
+        console.log("");
+        console.table(results);
+    })
 }
 
 const employeeSearch = function () {
@@ -111,6 +141,7 @@ const employeeSearch = function () {
         })
 }
 
+// Add Functions =====
 const addEmployee = function () {
     questions([{
         name: "fName",
@@ -195,7 +226,9 @@ const addRole = function () {
                 start()
             })
 }
+// ===================
 
+// update function ====
 const update = function () {
     questions([{
         name: "id",
@@ -271,5 +304,3 @@ const update = function () {
                     break;
             }
 })}
-
-// switch case switch query for each "answer.employeeAttribut etc."
