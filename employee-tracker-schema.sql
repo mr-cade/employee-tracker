@@ -39,4 +39,4 @@ VALUES ("Engineering"), ("Management"), ("Research and Development");
 -- select everything
 SELECT * FROM employee;
 SELECT * FROM roles;
-SELECT * FROM department;
+SELECT * FROM department; 
