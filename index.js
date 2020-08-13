@@ -14,7 +14,7 @@ var connection = mysql.createConnection({
     user: "root",
 
     // Your password
-    password: "",
+    password: "20164Runner",
     database: "employeeTracker_DB"
 });
 
@@ -93,10 +93,10 @@ const start = function () {
 // query specific functions used above in main program
 // =========================================================
 const allEmployees = function () {
-    var query = "SELECT * "
+    var query = "SELECT employee.id, employee.first_name, employee.last_name, roles.title, department.department_name AS department, roles.salary "
     query += "FROM employee "
     query += "LEFT JOIN roles ON (employee.role_id = roles.id) "
-    query += "LEFT JOIN department ON (employee.id = department.id)"
+    query += "LEFT JOIN department ON (roles.department_id = department.id);"
 
     connection.query(query, function (error, results, fields) {
         console.log("");
@@ -135,10 +135,10 @@ const employeeSearch = function () {
         message: "Please enter the id of the employee you would like to view."
     })
         .then(function (answer) {
-            var query = "SELECT * "
+            var query = "SELECT employee.id, employee.first_name, employee.last_name, roles.title, department.department_name AS department, roles.salary "
             query += "FROM employee "
-            query += "INNER JOIN roles ON (employee.id = roles.id) "
-            query += "INNER JOIN department ON (employee.id = department.id) "
+            query += "LEFT JOIN roles ON (employee.role_id = roles.id) "
+            query += "LEFT JOIN department ON (roles.department_id = department.id) "
             query += "WHERE employee.id = ?"
 
             connection.query(query, [answer.id], function (error, results, fields) {
